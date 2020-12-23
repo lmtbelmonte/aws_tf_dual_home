@@ -28,4 +28,7 @@ resource "aws_security_group" "sg-wsv-b" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  tags = {
+    Name = join("-", [var.cluster_id, "sg-WSV-B"])
+  }
 }
