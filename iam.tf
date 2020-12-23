@@ -9,9 +9,9 @@ resource "aws_iam_instance_profile" "instance_profile" {
 }
 
 resource "aws_iam_role" "assume_role" {
-  provider = aws.region-master
-  name     = join("-", [var.cluster_id, "assume_role"])
-  path     = "/"
+  provider           = aws.region-master
+  name               = join("-", [var.cluster_id, "assume_role"])
+  path               = "/"
   assume_role_policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -36,7 +36,7 @@ resource "aws_iam_role_policy" "role_policy" {
   provider = aws.region-master
   name     = join("-", [var.cluster_id, "role-policy"])
   role     = aws_iam_role.assume_role.id
-  policy = <<EOF
+  policy   = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
