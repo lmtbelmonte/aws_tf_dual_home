@@ -27,14 +27,6 @@ resource "aws_main_route_table_association" "default-rt-assoc" {
   route_table_id = aws_route_table.default.id
 }
 
-# creacion de la ruta al gateway
-resource "aws_route" "igw_route" {
-  provider               = aws.region-master
-  destination_cidr_block = var.external_ip
-  route_table_id         = aws_route_table.default.id
-  gateway_id             = aws_internet_gateway.igw.id
-}
-
 # creamos la routr table para la MNG-B 
 resource "aws_route_table" "rt-mng-b" {
   provider = aws.region-master
@@ -45,7 +37,7 @@ resource "aws_route_table" "rt-mng-b" {
 }
 
 # Asociamos la route table a las subnet
-resource "aws_route_table_association" "route_mng" {
+resource "aws_route_table_association" "route-mng" {
   provider       = aws.region-master
   route_table_id = aws_route_table.rt-mng-b.id
   subnet_id      = aws_subnet.subnet_b3.id
@@ -61,7 +53,7 @@ resource "aws_route_table" "rt-db-a" {
 }
 
 # Asociamos la route table a la subnet a1
-resource "aws_route_table_association" "route_dba_a" {
+resource "aws_route_table_association" "route-dba-a" {
   provider       = aws.region-master
   route_table_id = aws_route_table.rt-db-a.id
   subnet_id      = aws_subnet.subnet_a1.id
@@ -77,7 +69,7 @@ resource "aws_route_table" "rt-wsv-a" {
 }
 
 # Asociamos la route table a la subnet a2
-resource "aws_route_table_association" "route_wsv_a" {
+resource "aws_route_table_association" "route-wsv-a" {
   provider       = aws.region-master
   route_table_id = aws_route_table.rt-wsv-a.id
   subnet_id      = aws_subnet.subnet_a2.id
@@ -93,7 +85,7 @@ resource "aws_route_table" "rt-db-b" {
 }
 
 # Asociamos la route table a la subnet b1
-resource "aws_route_table_association" "route_db_b" {
+resource "aws_route_table_association" "route-db-b" {
   provider       = aws.region-master
   route_table_id = aws_route_table.rt-db-b.id
   subnet_id      = aws_subnet.subnet_b1.id
@@ -109,8 +101,16 @@ resource "aws_route_table" "rt-wsv-b" {
 }
 
 # Asociamos la route table a la subnet b2
-resource "aws_route_table_association" "route_wsv_b" {
+resource "aws_route_table_association" "route-wsv-b" {
   provider       = aws.region-master
   route_table_id = aws_route_table.rt-wsv-b.id
   subnet_id      = aws_subnet.subnet_b2.id
+}
+
+# creacion de la ruta al gateway 
+resource "aws_route" "igw_route" {
+  provider               = aws.region-master
+  destination_cidr_block = var.external_ip
+  route_table_id         = aws_route_table.rt-wsv-b.id
+  gateway_id             = aws_internet_gateway.igw.id
 }
