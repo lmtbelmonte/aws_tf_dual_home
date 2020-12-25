@@ -35,7 +35,7 @@ resource "aws_instance" "dualhome-wsv-b" {
   }
 }
 
-# creacion de una eip pra la inmstancia web 
+# creacion de una eip pra la instancia web 
 # la attachamos despues a la eni
 
 resource "aws_eip" "eip-wsv" {
@@ -51,7 +51,7 @@ resource "aws_eip" "eip-wsv" {
 resource "aws_network_interface" "eni-wsv-b" {
   provider        = aws.region-master
   subnet_id       = aws_subnet.subnet_b2.id
-  security_groups = [aws_security_group.sg-wsv-b.id, aws_security_group.sg-ssh.id ] 
+  security_groups = [aws_security_group.sg-wsv-b.id, aws_security_group.sg-ssh.id]
 
   attachment {
     instance     = aws_instance.dualhome-wsv-b.id
@@ -59,5 +59,20 @@ resource "aws_network_interface" "eni-wsv-b" {
   }
   tags = {
     Name = join("-", [var.cluster_id, "eni-WSV-B"])
+  }
+}
+
+# Segundo interfaz de red para la instancia web, este la asociamos a la subnet MNG 
+resource "aws_network_interface" "eni-mng-b" {
+  provider        = aws.region-master
+  subnet_id       = aws_subnet.subnet_b3.id
+  security_groups = [aws_security_group.sg-mng-b.id, aws_security_group.sg-ssh.id]
+
+  attachment {
+    instance     = aws_instance.dualhome-wsv-b.id
+    device_index = 2
+  }
+  tags = {
+    Name = join("-", [var.cluster_id, "eni-MNG-B"])
   }
 }
