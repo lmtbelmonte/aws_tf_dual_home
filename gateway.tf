@@ -43,6 +43,13 @@ resource "aws_route_table_association" "route-mng" {
   subnet_id      = aws_subnet.subnet_b3.id
 }
 
+# Creacion de la ruta al NAT gateway para el trafico de salida 
+resource "aws_route" "nat-gw-route" {
+  provider               = aws.region-master
+  destination_cidr_block = var.external_ip
+  route_table_id         = aws_route_table.rt-mng-b.id
+  nat_gateway_id         = aws_nat_gateway.nat.id
+}
 # creamos la route table para la DB-A 
 resource "aws_route_table" "rt-db-a" {
   provider = aws.region-master

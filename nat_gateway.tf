@@ -17,7 +17,7 @@ resource "aws_eip" "eip-nat" {
 resource "aws_nat_gateway" "nat" {
   provider      = aws.region-master
   allocation_id = aws_eip.eip-nat.id
-  subnet_id     = aws_subnet.subnet_b2.id
+  subnet_id     = aws_subnet.subnet_b3.id
 
   depends_on = [aws_internet_gateway.igw]
   tags = {
